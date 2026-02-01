@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "terrace-of-seeds.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: terrace-of-seeds
+  template:
+    metadata:
+      labels:
+        app: terrace-of-seeds
+    spec:
+      containers:
+        - name: terrace-of-seeds
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 7777
+          volumeMounts:
+            - name: world
+              mountPath: {{ .Values.world.path }}
+      volumes:
+        - name: world
+          persistentVolumeClaim:
+            claimName: {{ include "terrace-of-seeds.fullname" . }}-world
+

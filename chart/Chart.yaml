@@ -1,0 +1,24 @@
+apiVersion: v2
+name: terrace-of-seeds
+description: Dedicated Terraria server for Kubernetes
+type: application
+annotations:
+  artifacthub.io/category: game
+  artifacthub.io/license: MIT
+
+
+version: 0.1.0
+appVersion: "1.4.5.3"
+
+keywords:
+  - terraria
+  - game-server
+
+maintainers:
+  - name: Michael Cortese
+    url: https://github.com/cortesem
+
+home: https://github.com/cortesem/terrace-of-seeds
+sources:
+  - https://github.com/cortesem/terrace-of-seeds
+

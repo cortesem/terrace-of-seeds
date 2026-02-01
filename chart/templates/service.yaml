@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "terrace-of-seeds.fullname" . }}
+  {{ if .Values.service.metallb.enabled }}
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: {{ .Values.service.metallb.ip | quote }}
+  {{ end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 7777
+  selector:
+    app: terrace-of-seeds
+
