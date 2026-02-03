@@ -12,16 +12,84 @@ spec:
       labels:
         app: terrace-of-seeds
     spec:
+      securityContext:
+        fsGroup: 1000
+      {{- $worldpath := .Values.terraria.worldPath | default "/world" | trimSuffix "/" }}
+      {{- if .Values.terraria.initContainer.enabled }}
+      initContainers:
+        - name: seed-world
+          image: curlimages/curl:8.18.0
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+
+              WORLD="{{ $worldpath }}/{{ .Values.terraria.worldName }}.wld"
+
+              if [ -f "$WORLD" ]; then
+                echo "$WORLD already exists, skipping seed"
+                exit 0
+              fi
+
+              echo "Downloading world from URL..."
+
+              mkdir -p "{{ $worldpath }}"
+
+              ## Fix this
+              # curl \
+              #   --fail \
+              #   {{- if .Values.terraria.initContainer.tls.enabled }}
+              #   --cacert /etc/ssl/custom/ca.crt \
+              #   {{- end }}
+              #   -L {{ .Values.terraria.initContainer.url }} \
+              #   -o "$TMP_FILE" \
+
+              curl --fail -k -o "$WORLD" "{{ .Values.terraria.initContainer.url }}"
+
+              ls -l $worldpath
+          volumeMounts:
+            - name: world
+              mountPath: {{ $worldpath }}
+            {{- if .Values.terraria.initContainer.tls.enabled }}
+            - name: ca-cert
+              mountPath: /etc/ssl/custom
+              readOnly: true
+            {{- end }}
+      {{- end }}
       containers:
         - name: terrace-of-seeds
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 7777
+          workingDir: /terraria
+          command: ["./TerrariaServer.bin.x86_64"]
+          args:
+            {{- if .Values.terraria.initContainer.enabled }}
+            - "-world"
+            - '"/terraria/{{ $worldpath | trimPrefix "/" }}/{{ .Values.terraria.worldName }}.wld"'
+            {{- end }}
+            - "-config"
+            - "/terraria/config/serverconfig.txt"
           volumeMounts:
+            - name: config
+              mountPath: /terraria/config
+              readOnly: true
             - name: world
-              mountPath: {{ .Values.world.path }}
+              mountPath: /terraria/{{ $worldpath | trimPrefix "/" }}
       volumes:
+        - name: config
+          configMap:
+            name: {{ include "terrace-of-seeds.fullname" . }}-config
         - name: world
           persistentVolumeClaim:
             claimName: {{ include "terrace-of-seeds.fullname" . }}-world
+        {{- if .Values.terraria.initContainer.tls.enabled }}
+        - name: ca-cert
+          secret:
+            secretName: {{ .Values.terraria.initContainer.tls.secretName  }}
+            items:
+              - key: {{ .Values.terraria.initContainer.tls.certKey }}
+                path: ca.crt
+        {{- end }}
 

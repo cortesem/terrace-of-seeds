@@ -21,5 +21,5 @@ COPY --from=setup /terraria .
 
 EXPOSE 7777
 
-CMD ["./TerrariaServer.bin.x86_64", "-world", "/world/world.wld", "-autocreate", "3"]
+CMD ["./TerrariaServer.bin.x86_64"]
 

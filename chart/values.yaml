@@ -1,20 +1,59 @@
 image:
   repository: spondifereye/terrace-of-seeds
-  tag: 0.1
+  tag: 0.3
   pullPolicy: IfNotPresent
 
 service:
   type: LoadBalancer
   port: 7777
   metallb:
-    enabled: true
-    ip: "192.168.4.55"
+    enabled: false
+    ip: ""
 
 persistence:
   size: 1Gi
-  storageClass: "longhorn-retain"
+  storageClass: ""
 
-world:
-  path: /world
-  filename: world.wld
-
+## Terraria Server Settings. See official Terraria server docs for more info on these settings: https://terraria.wiki.gg/wiki/Server#Server_config_file
+terraria:
+  ## init container used to side load an existing world. Only url endpoint supported to download the world.
+  initContainer:
+    ## enabled determines if an init containter should be used to side load an existing world.
+    enabled: false
+    ## url is the url where the .wld world file can be downloaded. (https://.../world.wld)
+    url: ""
+    ## tls settings when using self signed certs.
+    tls:
+      ## enabled true if you want to provide a trusted cert when downloading the world.
+      enabled: false
+      ## secretName is the name of the secret that contains the cert.
+      secretName: trusted-ca
+      ## certKey is the key name that contains the cert value.
+      certKey: ca.crt
+  ## worldName sets the world name.
+  worldName: Terrace_of_Seeds
+  ## worldPath is the absolute path where world files will be stored.
+  worldPath: /world
+  ## Settings determines the size of the auto created world. worldSize values are: 1(small), 2(medium), and 3(large)(default).
+  autoCreate: 3
+  ## seed is the world seed to use for auto create. For information on world seeds see: https://terraria.wiki.gg/wiki/World_Seed
+  seed: ""
+  ## difficulty sets the worlds difficulty setting. Values are: 0(normal)(default), 1(expert), 2(master), 3(journey)
+  difficulty: 0
+  ## maxPlayers sets the max number of players allowed on a server. Value must be between 1 and 255.
+  maxPlayers: 8
+  ## password sets the server password.
+  password: ""
+  ## secure adds additional cheat protection.
+  secure: 1
+  ## language sets the server language. Available codes: 
+  ## en-US = English
+  ## de-DE = German
+  ## it-IT = Italian
+  ## fr-FR = French
+  ## es-ES = Spanish
+  ## ru-RU = Russian
+  ## zh-Hans = Chinese
+  ## pt-BR = Portuguese
+  ## pl-PL = Polish
+  language: en-US
