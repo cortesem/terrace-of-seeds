@@ -60,17 +60,31 @@ spec:
       containers:
         - name: terrace-of-seeds
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "2"
+            limits:
+              memory: "8Gi"
+              cpu: "4"
           ports:
             - containerPort: 7777
           workingDir: /terraria
-          command: ["./TerrariaServer.bin.x86_64"]
-          args:
-            {{- if .Values.terraria.initContainer.enabled }}
-            - "-world"
-            - '"/terraria/{{ $worldpath | trimPrefix "/" }}/{{ .Values.terraria.worldName }}.wld"'
-            {{- end }}
-            - "-config"
-            - "/terraria/config/serverconfig.txt"
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              sleep 500
+          # command: ["./TerrariaServer.bin.x86_64"]
+          # args:
+          #   {{- if .Values.terraria.initContainer.enabled }}
+          #   - "-world"
+          #   - '"/terraria/{{ $worldpath | trimPrefix "/" }}/{{ .Values.terraria.worldName }}.wld"'
+          #   {{- else }}
+          #   - "-config"
+          #   - "/terraria/config/serverconfig.txt"
+          #   {{- end }}
           volumeMounts:
             - name: config
               mountPath: /terraria/config

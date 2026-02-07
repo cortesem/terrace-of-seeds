@@ -13,7 +13,7 @@ RUN wget https://terraria.org/api/download/pc-dedicated-server/terraria-server-$
     rm terraria-server-$SERVER_VERSION.zip && \
     chmod +x TerrariaServer.bin.x86_64
 
-FROM debian:stable-slim
+FROM debian:bookworm
 
 WORKDIR /terraria
 

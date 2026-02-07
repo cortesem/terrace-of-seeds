@@ -1,6 +1,6 @@
 image:
   repository: spondifereye/terrace-of-seeds
-  tag: 0.3
+  tag: 0.4
   pullPolicy: IfNotPresent
 
 service:

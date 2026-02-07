@@ -1,0 +1,16 @@
+[Unit]
+Description=Terraria Server - Running in tmux - Use systemctl status terraria to find the session name.
+After=network.target
+
+[Service]
+Type=forking
+User=$TERRARIA_USER
+WorkingDirectory=$TERRARIA_HOME
+ExecStart=/home/michael/terraria/terraria.sh start
+ExecStop=/home/michael/terraria/terraria.sh stop
+ExecReload=/home/michael/terraria/terraria.sh restart
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
