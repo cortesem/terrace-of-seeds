@@ -6,9 +6,9 @@ After=network.target
 Type=forking
 User=$TERRARIA_USER
 WorkingDirectory=$TERRARIA_HOME
-ExecStart=/home/michael/terraria/terraria.sh start
-ExecStop=/home/michael/terraria/terraria.sh stop
-ExecReload=/home/michael/terraria/terraria.sh restart
+ExecStart=$TERRARIA_HOME/terrace-of-seeds/systemd/terraria.sh start
+ExecStop=$TERRARIA_HOME/terrace-of-seeds/systemd/terraria.sh stop
+ExecReload=$TERRARIA_HOME/terrace-of-seeds/systemd/terraria.sh restart
 Restart=on-failure
 RestartSec=10
 

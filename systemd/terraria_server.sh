@@ -3,9 +3,9 @@ set -e
 
 TERRARIA_SESSION="terraria"
 TERRARIA_USER=$(whoami)
-TERRARIA_HOME="/opt/terraria"
+TERRARIA_HOME="/opt/terraria_server"
 TERRARIA_WORLD="$TERRARIA_HOME/worlds/Comical_Terraria_of_Seeds.wld"
-TERRARIA_SERVER="$TERRARIA_HOME/TerrariaServer.bin.x86_64"
+TERRARIA_SERVER="$TERRARIA_HOME/terraria/TerrariaServer.bin.x86_64"
 
 start() {
   if tmux has-session -t "$TERRARIA_SESSION" 2>/dev/null; then
