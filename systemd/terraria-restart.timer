@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily Terraria Server Restart
+
+[Timer]
+OnCalendar=Wed *-*-* 04:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

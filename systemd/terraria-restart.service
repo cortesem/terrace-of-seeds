@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart Terraria Server
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl restart terraria.service
